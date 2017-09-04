@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AIUIDemoSample</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="touch_speak">按住说话</string>
+    <string name="up_cancel">松开结束</string>
+
+</resources>
