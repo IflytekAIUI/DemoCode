@@ -132,7 +132,7 @@ public class OrderMenuHandler extends Handler {
 
         MessagesViewModel.getInstance()
                 .fakeAIUIResult(0, "FOOBAR.MenuSkill", branchMenu.toString());
-        return super.urlClicked(url);
+        return true;
     }
 
 
