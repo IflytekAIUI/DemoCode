@@ -74,30 +74,40 @@ public class MessagesCenterRepository {
         mAgent = AIUIAgent.createAgent(context, config.toString(), new AIUIListener() {
             @Override
             public void onEvent(AIUIEvent aiuiEvent) {
-            switch (aiuiEvent.eventType){
-                case AIUIConstant.EVENT_STATE:{
-                    mCurrentState = aiuiEvent.arg1;
-                }break;
-                case AIUIConstant.EVENT_RESULT:{
-                    JSONObject semanticResult = getSemanticResult(aiuiEvent);
-                    if(semanticResult != null && semanticResult.length() !=0){
+                switch (aiuiEvent.eventType) {
+                    case AIUIConstant.EVENT_STATE: {
+                        mCurrentState = aiuiEvent.arg1;
+                    }
+                    break;
+                    case AIUIConstant.EVENT_RESULT: {
+                        JSONObject semanticResult = getSemanticResult(aiuiEvent);
+                        if (semanticResult != null && semanticResult.length() != 0) {
                             addMessageToDB(new Message(AIUI, TEXT, semanticResult.toString().getBytes()));
-                            if(mAppendVoiceMsg != null){
+                            if (mAppendVoiceMsg != null) {
                                 mAppendVoiceMsg.cacheContent += semanticResult.optString("text");
                                 updateMessage(mAppendVoiceMsg);
                             }
+                        }
                     }
-                }break;
-                case AIUIConstant.EVENT_SLEEP:{
-                    addMessageToDB(new Message(AIUI, TEXT,
-                            fakeSemanticResult(0, "sleep", "都不理我，我去休息了",  null, null).getBytes()));
-                }
-                break;
+                    break;
+                    case AIUIConstant.EVENT_SLEEP: {
+                        addMessageToDB(new Message(AIUI, TEXT,
+                                fakeSemanticResult(0, "sleep", "都不理我，我去休息了", null, null).getBytes()));
+                    }
+                    break;
 
-                case AIUIConstant.EVENT_CMD_RETURN:{
-                    processCmdReturnEvent(aiuiEvent);
-                }break;
-            }
+                    case AIUIConstant.EVENT_ERROR: {
+                        if (aiuiEvent.arg1 == 10120) {
+                            addMessageToDB(new Message(AIUI, TEXT,
+                                    fakeSemanticResult(0, "error", "网络有点问题 :(", null, null).getBytes()));
+                        }
+                    }
+                    break;
+                    case AIUIConstant.EVENT_CMD_RETURN: {
+                        processCmdReturnEvent(aiuiEvent);
+                    }
+                    break;
+                }
             }
         });
         mAgent.sendMessage(new AIUIMessage(AIUIConstant.CMD_START, 0, 0, null, null));
