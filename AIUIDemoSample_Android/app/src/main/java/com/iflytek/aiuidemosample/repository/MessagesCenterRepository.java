@@ -55,12 +55,12 @@ public class MessagesCenterRepository {
     private int mCurrentState = AIUIConstant.STATE_IDLE;
 
     private String mAppid;
-    private String mKey;
+//    private String mKey;
 
     public MessagesCenterRepository(Context context, JSONObject config){
 
         mAppid = config.optJSONObject("login").optString("appid");
-        mKey = config.optJSONObject("login").optString("key");
+//        mKey = config.optJSONObject("login").optString("key");
 
         mDB = Room.databaseBuilder(context, MessageDB.class, "aiui_message").build();
         mMessageDao = mDB.messageDao();
@@ -68,8 +68,8 @@ public class MessagesCenterRepository {
         mInteractMsgFlowable = mMessageDao.getAllMessage().observeOn(AndroidSchedulers.mainThread());
 
         SpeechUtility.createUtility(context,
-                String.format("engine_mode=msc,delay_init=0,appid=%s,key=%s",
-                        mAppid, mKey));
+                String.format("engine_mode=msc,delay_init=0,appid=%s",
+                        mAppid));
 
         mAgent = AIUIAgent.createAgent(context, config.toString(), new AIUIListener() {
             @Override
