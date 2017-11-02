@@ -115,7 +115,7 @@ public class MessageHandler implements OnUrlClickListener, OnUrlLongClickListene
             try {
                 semanticResult = new JSONObject(new String(mMessage.msgData));
                 parsedSemanticResult.rc = semanticResult.optInt("rc");
-                if(parsedSemanticResult.rc != 0){
+                if(parsedSemanticResult.rc == 4){
                     String sid = semanticResult.optString("sid");
                     parsedSemanticResult.answer = sid + "<br/><br/>" + defaultAnswer;
                 }else{

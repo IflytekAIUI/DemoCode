@@ -115,6 +115,7 @@ public class MessagesViewModel extends ViewModel {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
                         StringBuilder contactJson = new StringBuilder();
+                        putPersParam("uid", "");
                         if (mContactRepository.hasChanged()) {
                             fakeAIUIResult(0, "fake",
                                     "检测到通讯录变化，上传通讯录联系人"
@@ -132,7 +133,6 @@ public class MessagesViewModel extends ViewModel {
 
                             syncDynamicData(new DynamicEntityData(
                                     "IFLYTEK.telephone_contact", "uid", "", contactJson.toString()));
-                            putPersParam("uid", "");
                         }
                     }
 
