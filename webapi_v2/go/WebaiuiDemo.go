@@ -17,7 +17,7 @@ var APPID = ""
 var API_KEY = ""
 var SCENE = "main"
 var AUE = "raw"
-var UNIQUE_ID = "2894c985bf8b1111c6728db79d3479ae5"
+var AUTH_ID = "2894c985bf8b1111c6728db79d3479ae"
 var DATA_TYPE = "audio"
 var SAMPLE_RATE = "16000"
 var LAT = "39.938838";
@@ -44,7 +44,7 @@ func main() {
 
 func buildHeader()(header map[string]string)  {
         curTime := strconv.Itoa(int(time.Now().Unix()))
-        param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"unique_id\":\"" + UNIQUE_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\"}"
+        param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\"}"
         paramBase64 := base64.StdEncoding.EncodeToString([]byte(param))
         checkSum := MD5Encode(API_KEY + curTime + paramBase64)
         header = make(map[string]string)
@@ -52,7 +52,6 @@ func buildHeader()(header map[string]string)  {
         header["X-Param"] = paramBase64
         header["X-CheckSum"] = checkSum
         header["X-Appid"] = APPID
-        header["X-Real-Ip"] = CLIENT_IP
         return header
 }
 

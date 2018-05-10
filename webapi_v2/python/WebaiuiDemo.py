@@ -8,7 +8,7 @@ URL = "http://api.xfyun.cn/v2/aiui"
 APPID = ""
 API_KEY = ""
 AUE = "raw"
-UNIQUE_ID = "2894c985bf8b1111c6728db79d3479ae5"
+AUTH_ID = "2894c985bf8b1111c6728db79d3479ae"
 DATA_TYPE = "audio"
 SAMPLE_RATE = "16000"
 SCENE = "main"
@@ -20,7 +20,7 @@ FILE_PATH = ""
 
 def buildHeader():
     curTime = str(int(time.time()))
-    param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"unique_id\":\""+UNIQUE_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"scene\":\""+SCENE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}"
+    param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"scene\":\""+SCENE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}"
     paramBase64 = base64.b64encode(param)
 
     m2 = hashlib.md5()

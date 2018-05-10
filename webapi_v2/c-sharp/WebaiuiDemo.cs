@@ -22,7 +22,7 @@ class WebaiuiDemo{
 	private const String APPID = "";
 	private const String API_KEY = "";
 	private const String AUE = "raw";
-	private const String UNIQUE_ID = "2894c985bf8b1111c6728db79d3479ae5";
+	private const String AUTH_ID = "2894c985bf8b1111c6728db79d3479ae";
 	private const String DATA_TYPE = "audio";
 	private const String SAMPLE_RATE = "16000";
 	private const String SCENE = "main";
@@ -41,7 +41,7 @@ class WebaiuiDemo{
 	
 	private static Dictionary<String,String> buildHeader(){
 		String curTime = DateTime.Now.Second.ToString();
-		String param = "{\"aue\":\""+AUE+"\",\"result_level\":\""+RESULT_LEVEL+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"unique_id\":\""+UNIQUE_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\"}";
+		String param = "{\"aue\":\""+AUE+"\",\"result_level\":\""+RESULT_LEVEL+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\"}";
 		String paramBase64 = System.Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(param));
 		String checkSum = EncryptWithMD5(API_KEY + curTime + paramBase64);
 		

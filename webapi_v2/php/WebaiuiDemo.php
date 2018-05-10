@@ -4,7 +4,7 @@ class Demo{
 		$URL = "http://api.xfyun.cn/v2/aiui";
 		$APPID = "";
 		$API_KEY = "";		
-		$UNIQUE_ID = "2894c985bf8b1111c6728db79d3479ae5";
+		$AUTH_ID = "2894c985bf8b1111c6728db79d3479ae";
 		$AUE = "raw";
 		$SAMPLE_RATE = "16000";
 		$DATA_TYPE = "audio";
@@ -18,7 +18,7 @@ class Demo{
 			"result_level"=>$RESULT_LEVEL,
 			"aue"=>$AUE,
 			"scene"=>$SCENE,
-			"unique_id"=>$UNIQUE_ID,
+			"auth_id"=>$AUTH_ID,
 			"data_type"=>$DATA_TYPE,
 			"sample_rate"=>$SAMPLE_RATE,
 			"lat"=>$LAT,

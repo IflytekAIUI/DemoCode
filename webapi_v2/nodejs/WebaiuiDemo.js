@@ -7,7 +7,7 @@ var querystring=require('querystring');
 
 var APPID = "";
 var API_KEY = "";
-var UNIQUE_ID = "2894c985bf8b1111c6728db79d3479ae5";
+var AUTH_ID = "2894c985bf8b1111c6728db79d3479ae";
 var AUE = "raw";
 var CLIENT_IP = "127.0.0.1";
 var SAMPLE_RATE = "16000";
@@ -19,7 +19,7 @@ var RESULT_LEVEL = "complete";
 var FILE_PATH = ""
 
 var X_CurTime = Math.floor(Date.now()/1000);
-var param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"aue\":\""+AUE+"\",\"scene\":\""+SCENE+"\",\"unique_id\":\""+UNIQUE_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}";
+var param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"aue\":\""+AUE+"\",\"scene\":\""+SCENE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}";
 var X_Param = new Buffer(param).toString('base64'); 
 var X_CheckSum = md5(API_KEY+X_CurTime+X_Param);
 

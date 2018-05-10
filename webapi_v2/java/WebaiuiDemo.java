@@ -33,7 +33,7 @@ public class WebaiuiDemo {
 	private static final String DATA_TYPE = "audio";
 	private static final String SCENE = "main";
 	private static final String SAMPLE_RATE = "16000";
-	private static final String UNIQUE_ID = "2894c985bf8b1111c6728db79d3479ae5";
+	private static final String AUTH_ID = "2894c985bf8b1111c6728db79d3479ae";
 	private static final String AUE = "raw";
 	private static final String FILE_PATH = "";
 	
@@ -46,7 +46,7 @@ public class WebaiuiDemo {
 
 	private static Map<String, String> buildHeader() throws UnsupportedEncodingException, ParseException {
 		String curTime = System.currentTimeMillis() / 1000L + "";
-		String param = "{\"aue\":\""+AUE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"unique_id\":\""+UNIQUE_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\"}";		
+		String param = "{\"aue\":\""+AUE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\"}";		
 		String paramBase64 = new String(Base64.encodeBase64(param.getBytes("UTF-8")));
 		String checkSum = DigestUtils.md5Hex(API_KEY + curTime + paramBase64);
 
