@@ -1,7 +1,7 @@
 <?php
 class Demo{
 	function testWebaiui(){
-		$URL = "http://api.xfyun.cn/v2/aiui";
+		$URL = "http://openapi.xfyun.cn/v2/aiui";
 		$APPID = "";
 		$API_KEY = "";		
 		$AUTH_ID = "2894c985bf8b1111c6728db79d3479ae";

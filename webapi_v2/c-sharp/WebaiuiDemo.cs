@@ -18,7 +18,7 @@ using System.Security.Cryptography;
  * 
  */
 class WebaiuiDemo{
-	private const String URL = "http://api.xfyun.cn/v2/aiui";
+	private const String URL = "http://openapi.xfyun.cn/v2/aiui";
 	private const String APPID = "";
 	private const String API_KEY = "";
 	private const String AUE = "raw";

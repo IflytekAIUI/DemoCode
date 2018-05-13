@@ -12,7 +12,7 @@ import (
         "time"
 )
 
-var URL = "http://api.xfyun.cn/v2/aiui"
+var URL = "http://openapi.xfyun.cn/v2/aiui"
 var APPID = ""
 var API_KEY = ""
 var SCENE = "main"

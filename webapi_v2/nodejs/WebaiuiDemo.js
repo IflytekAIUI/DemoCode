@@ -24,7 +24,7 @@ var X_Param = new Buffer(param).toString('base64');
 var X_CheckSum = md5(API_KEY+X_CurTime+X_Param);
 
 var options={  
-    hostname:'api.xfyun.cn',  
+    hostname:'openapi.xfyun.cn',  
     port:80,  
     path:'/v2/aiui',  
     method:'POST',  

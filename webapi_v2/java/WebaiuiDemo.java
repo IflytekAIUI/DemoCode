@@ -27,7 +27,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * 
  */
 public class WebaiuiDemo {
-	private static final String URL = "http://api.xfyun.cn/v2/aiui";
+	private static final String URL = "http://openapi.xfyun.cn/v2/aiui";
 	private static final String APPID = "";
 	private static final String API_KEY = "";
 	private static final String DATA_TYPE = "audio";

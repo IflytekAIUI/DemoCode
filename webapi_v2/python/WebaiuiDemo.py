@@ -4,7 +4,7 @@ import time
 import hashlib
 import base64
 
-URL = "http://api.xfyun.cn/v2/aiui"
+URL = "http://openapi.xfyun.cn/v2/aiui"
 APPID = ""
 API_KEY = ""
 AUE = "raw"
