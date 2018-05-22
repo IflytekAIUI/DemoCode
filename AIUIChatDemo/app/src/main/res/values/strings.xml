@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">AIUI</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="wakeup_tip">快说\"小飞小飞\"唤醒我吧</string>
+
+    <string name="touch_speak">按住说话</string>
+    <string name="up_cancel">松开结束</string>
+    <!--侧边栏导航-->
+    <string name="nav_feedback">反馈</string>
+    <string name="nav_settings">设置</string>
+    <string name="nav_about">关于</string>
+    <!--设置页面-->
+    <string name="interact">交互</string>
+    <string name="wakeup">唤醒</string>
+    <string name="wakeup_tip_summary">通过唤醒+命令进行交互</string>
+    <string name="bos">前端点</string>
+    <string name="eos">语音后端点时间</string>
+    <string name="eos_invalid_tip">后端点有效值应为数字</string>
+
+    <string name="debug">调试</string>
+    <string name="debug_log">输出调试日志</string>
+    <string name="debug_log_summary">在Logcat中打印运行日志</string>
+    <string name="save_datalog">保存交互音频</string>
+    <string name="save_datalog_summary">在SD卡中保存交互的音频与结果日志</string>
+    <string name="prime">高级</string>
+    <string name="appid_set">AppID设置</string>
+    <string name="appid_set_summary">使用新的AppID和Key</string>
+    <string name="appid_input">AppID</string>
+    <string name="key_input">Key</string>
+    <string name="appid_restore_tip">清空AppID及Key可恢复默认</string>
+    <string name="scene_input">Scene</string>
+
+</resources>

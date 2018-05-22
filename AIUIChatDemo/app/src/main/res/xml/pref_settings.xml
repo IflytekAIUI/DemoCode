@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/interact">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="aiui_wakeup"
+            android:summary="@string/wakeup_tip_summary"
+            android:title="@string/wakeup" />
+
+        <EditTextPreference
+            android:defaultValue="1000"
+            android:key="aiui_eos"
+            android:numeric="integer"
+            android:title="@string/eos"
+            android:summary="1000ms"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/debug">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="aiui_debug_log"
+            android:title="@string/debug_log"
+            android:summary="@string/debug_log_summary"/>
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="aiui_save_datalog"
+            android:title="@string/save_datalog"
+            android:summary="@string/save_datalog_summary"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

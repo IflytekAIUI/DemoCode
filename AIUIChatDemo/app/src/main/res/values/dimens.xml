@@ -1,0 +1,35 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="content_horizontal_margin">10dp</dimen>
+    <dimen name="chat_item_padding">10dp</dimen>
+    <dimen name="item_extra_padding">64dp</dimen>
+    <dimen name="bubble_item_padding">6dp</dimen>
+    <dimen name="insight_padding">1dp</dimen>
+    <dimen name="content_small">5dp</dimen>
+    <dimen name="record_margin">10dp</dimen>
+    <dimen name="play_control_margin">40dp</dimen>
+    <!-- 字体大小 -->
+    <dimen name="text_title">19sp</dimen>
+    <dimen name="text_subhead">17sp</dimen>
+    <dimen name="text_body">15sp</dimen>
+    <dimen name="text_caption">13sp</dimen>
+    <dimen name="line_height">1dp</dimen>
+    <dimen name="detail_text">6dp</dimen>
+
+    <dimen name="default_margin">8dp</dimen>
+
+
+    <!-- General -->
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_small">4dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+
+</resources>

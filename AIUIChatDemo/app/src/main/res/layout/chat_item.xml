@@ -1,0 +1,116 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.util.LayoutDirection"/>
+        <import type="com.daasuu.bl.ArrowDirection"/>
+        <variable
+            name="msg"
+            type="com.iflytek.aiui.demo.chat.model.InteractMessage" />
+        <variable
+            name="binding"
+            type="com.iflytek.aiui.demo.chat.databinding.ChatItemBinding" />
+        <variable
+            name="handler"
+            type="com.iflytek.aiui.demo.chat.ui.chat.ItemListener" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/bubble_item_padding"
+        android:paddingRight="@{msg.getMessage().isFromUser()? @dimen/chat_item_padding:@dimen/item_extra_padding}"
+        android:paddingLeft="@{msg.getMessage().isFromUser()? @dimen/item_extra_padding:@dimen/chat_item_padding}"
+        android:layoutDirection="@{msg.getMessage().isFromUser()? LayoutDirection.RTL:LayoutDirection.LTR}"
+        >
+
+        <ImageView
+            android:id="@+id/chat_item_header"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@{msg.getMessage().isFromUser()? @drawable/user:@drawable/aiui}"
+            android:scaleType="fitCenter" />
+
+        <com.iflytek.aiui.demo.chat.ui.view.ChatBubbleLayout
+            android:id="@+id/chat_item_layout_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:bl_cornersRadius="18dp"
+            app:bl_arrowPosition="16dp"
+            app:bl_arrowHeight="14dp"
+            app:chatBubbleColor="@{msg.getMessage().isFromUser()? @color/user_bubble_color:@color/aiui_bubble_color}"
+            app:chatArrowDirection="@{msg.getMessage().isFromUser()? ArrowDirection.RIGHT:ArrowDirection.LEFT}"
+            android:onClick="@{(view) -> handler.onMessageClick(msg, binding)}" >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/content_horizontal_margin">
+            <LinearLayout
+                android:visibility="@{msg.getMessage().isText()? View.GONE: View.VISIBLE}"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/chat_item_voice_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:paddingLeft="4dp"
+                    android:text='@{msg.getMessage().getAudioLen() + "s"}'
+                    android:textColor="@color/voice_time_color"
+                    android:layout_gravity="left"
+                    android:visibility="@{(msg.getMessage().isText() || msg.getMessage().getAudioLen() ==0)? View.GONE: View.VISIBLE}" />
+
+                <ImageView
+                    android:id="@+id/chat_item_voice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    android:padding="2dp"
+                    android:src="@mipmap/icon_voice_right3"
+                    android:layout_gravity="left"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/chat_item_content_text"
+                style="@style/text_subhead_black"
+                android:padding="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:breakStrategy="simple"
+                android:textColor="@color/black"
+                android:onClick="@{(view) -> handler.onMessageClick(msg, binding)}"
+                android:visibility="@{msg.getMessage().isEmptyContent()? View.GONE:View.VISIBLE}"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:paddingLeft="@dimen/insight_padding"
+                android:focusable="false"
+                android:src="@drawable/insight"
+                android:visibility="@{msg.getMessage().isFromUser()? View.GONE: View.VISIBLE}"
+                android:onClick="@{(view) -> handler.onMessageClick(msg, binding)}"
+                />
+            </LinearLayout>
+
+            </LinearLayout>
+
+        </com.iflytek.aiui.demo.chat.ui.view.ChatBubbleLayout>
+
+
+    </LinearLayout>
+</layout>
