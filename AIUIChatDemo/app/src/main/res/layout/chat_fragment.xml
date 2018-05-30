@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="com.iflytek.aiui.demo.chat.common.Constant" />
+        <import type="android.view.View" />
+        <variable
+            name="state"
+            type="int" />
+        <variable
+            name="playState"
+            type="com.iflytek.aiui.demo.chat.repository.player.PlayState" />
+        <variable
+            name="player"
+            type="com.iflytek.aiui.demo.chat.ui.chat.PlayerViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/chat_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/play_control_bar"
+            layout="@layout/aiui_player_controller"
+            app:layout_constraintBottom_toTopOf="@id/chat_list"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:player="@{player}"
+            bind:state="@{playState}" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="0dp"
+            android:background="@color/bg_content"
+            android:padding="0dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/play_control_bar"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+        <FrameLayout
+            android:id="@+id/bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="6dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="6dp"
+                android:visibility="@{state!=Constant.STATE_WAKEUP &amp;&amp; state!=Constant.STATE_WAITING_WAKEUP?View.VISIBLE:View.GONE}"
+                android:id="@+id/reply_bar">
+
+                <ImageView
+                    android:id="@+id/emotion_voice"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginRight="@dimen/content_horizontal_margin"
+                    android:clickable="true"
+                    android:scaleType="centerCrop"
+                    android:src="@{state == Constant.STATE_VOICE? @drawable/icon_keyboard:@drawable/icon_chat_voice}"/>
+
+                <EditText
+                    android:id="@+id/edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.48"
+                    android:background="@drawable/corners_edit_white"
+                    android:maxLines="3"
+                    android:minHeight="36dp"
+                    android:visibility="@{state == Constant.STATE_TEXT? View.VISIBLE:View.GONE}"
+                    android:paddingLeft="@dimen/content_horizontal_margin"
+                    android:paddingRight="@dimen/content_horizontal_margin"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/voice_text"
+                    style="@style/text_subhead_black"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/corners_edit"
+                    android:gravity="center"
+                    android:visibility="@{state != Constant.STATE_TEXT? View.VISIBLE:View.GONE}"
+                    android:text="@{state == Constant.STATE_VOICE? @string/touch_speak:@string/up_cancel}"
+                    android:minHeight="36dp"
+                    android:paddingLeft="@dimen/content_horizontal_margin"
+                    android:paddingRight="@dimen/content_horizontal_margin" />
+
+                <Button
+                    android:id="@+id/emotion_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/content_horizontal_margin"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:minWidth= "1dp"
+                    android:minHeight="36dp"
+                    android:textSize="16sp"
+                    android:background="@drawable/send_btn_back"
+                    android:text="发送"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:visibility="@{state==Constant.STATE_WAITING_WAKEUP||state==Constant.STATE_WAKEUP?View.VISIBLE:View.GONE}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/wakeup_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/wakeup_tip_color"
+                    android:layout_weight="1"
+                    android:background="@drawable/corners_edit"
+                    android:gravity="center"
+                    android:minHeight="36dp"
+                    android:textSize="20sp"
+                    android:text="@string/wakeup_tip"
+                    android:visibility="@{state == Constant.STATE_WAITING_WAKEUP? View.VISIBLE:View.GONE}"
+                    android:paddingLeft="@dimen/content_horizontal_margin"
+                    android:paddingRight="@dimen/content_horizontal_margin" />
+
+                <jaygoo.widget.wlv.WaveLineView
+                    android:id="@+id/visualizer"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:visibility="@{state == Constant.STATE_WAKEUP? View.VISIBLE:View.INVISIBLE}"
+                    app:wlvBackgroundColor="@color/white"
+                    app:wlvLineColor="@color/black"
+                    app:wlvMoveSpeed="320"
+                    app:wlvSensibility="10"/>
+            </FrameLayout>
+        </FrameLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
+
