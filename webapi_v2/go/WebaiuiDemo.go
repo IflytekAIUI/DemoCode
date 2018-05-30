@@ -24,6 +24,8 @@ var LAT = "39.938838";
 var LNG = "116.368624";
 var RESULT_LEVEL = "complete"
 var FILE_PATH = ""
+// 注意，pers_param参数需进行两层转义
+var PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"2894c985bf8b1111c6728db79d3479ae\\\\\\\"}";
 
 /**
  * AIUI WebAPI V2 接口调用示例
@@ -45,7 +47,9 @@ func main() {
 func buildHeader()(header map[string]string)  {
         curTime := strconv.Itoa(int(time.Now().Unix()))
         param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\"}"
-        paramBase64 := base64.StdEncoding.EncodeToString([]byte(param))
+        // 使用个性化参数时参数格式如下：
+		// param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\",\"pers_param\":\"" + PERS_PARAM + "\"}"
+		paramBase64 := base64.StdEncoding.EncodeToString([]byte(param))
         checkSum := MD5Encode(API_KEY + curTime + paramBase64)
         header = make(map[string]string)
         header["X-CurTime"] = curTime

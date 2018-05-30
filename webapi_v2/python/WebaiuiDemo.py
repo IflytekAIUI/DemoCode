@@ -15,12 +15,16 @@ SCENE = "main"
 RESULT_LEVEL = "complete"
 LAT = "39.938838"
 LNG = "116.368624"
+#个性化参数，注意需进行两层转义
+PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"2894c985bf8b1111c6728db79d3479ae\\\\\\\"}"
 FILE_PATH = ""
 
 
 def buildHeader():
     curTime = str(int(time.time()))
     param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"scene\":\""+SCENE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}"
+    #使用个性化参数时参数格式如下：
+    #param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"scene\":\""+SCENE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"pers_param\":\""+PERS_PARAM+"\"}"
     paramBase64 = base64.b64encode(param)
 
     m2 = hashlib.md5()

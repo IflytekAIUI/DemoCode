@@ -30,6 +30,8 @@ class WebaiuiDemo{
 	private const String LAT = "39.938838";
 	private const String LNG = "116.368624";
 	private const String FILE_PATH = "";
+	// 个性化参数，注意需进行两层转义
+	private const String PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"2894c985bf8b1111c6728db79d3479ae\\\\\\\"}";
 	
 	public static void Main(){
         Dictionary<String,String> header = buildHeader();
@@ -42,6 +44,8 @@ class WebaiuiDemo{
 	private static Dictionary<String,String> buildHeader(){
 		String curTime = DateTime.Now.Second.ToString();
 		String param = "{\"aue\":\""+AUE+"\",\"result_level\":\""+RESULT_LEVEL+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\"}";
+		//使用个性化参数时参数格式如下：
+		//String param = "{\"aue\":\""+AUE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\",\"pers_param\":\""+PERS_PARAM+"\"}";
 		String paramBase64 = System.Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(param));
 		String checkSum = EncryptWithMD5(API_KEY + curTime + paramBase64);
 		
