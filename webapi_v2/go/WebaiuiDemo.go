@@ -49,7 +49,7 @@ func buildHeader()(header map[string]string)  {
         param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\"}"
         // 使用个性化参数时参数格式如下：
         // param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\",\"pers_param\":\"" + PERS_PARAM + "\"}"
-		paramBase64 := base64.StdEncoding.EncodeToString([]byte(param))
+        paramBase64 := base64.StdEncoding.EncodeToString([]byte(param))
         checkSum := MD5Encode(API_KEY + curTime + paramBase64)
         header = make(map[string]string)
         header["X-CurTime"] = curTime
