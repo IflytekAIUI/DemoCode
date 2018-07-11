@@ -24,8 +24,8 @@ var LAT = "39.938838";
 var LNG = "116.368624";
 var RESULT_LEVEL = "complete"
 var FILE_PATH = ""
-// 注意，pers_param参数需进行两层转义
-var PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"2894c985bf8b1111c6728db79d3479ae\\\\\\\"}";
+// 个性化参数，需转义
+var PERS_PARAM = "{\\\"auth_id\\\":\\\"2894c985bf8b1111c6728db79d3479ae\\\"}";
 
 /**
  * AIUI WebAPI V2 接口调用示例

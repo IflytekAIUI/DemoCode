@@ -12,8 +12,8 @@ class Demo{
 		$RESULT_LEVEL = "complete";
 		$LAT = "39.938838";
 		$LNG = "116.368624";
-		// 个性化参数，注意需进行两层转义
-		$PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"2894c985bf8b1111c6728db79d3479ae\\\\\\\"}";		
+		// 个性化参数，需转义
+		$PERS_PARAM = "{\\\"auth_id\\\":\\\"2894c985bf8b1111c6728db79d3479ae\\\"}";		
 		$FILE_PATH = "";
 		
 		$Param= array(

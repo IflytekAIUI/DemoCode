@@ -17,8 +17,8 @@ var LAT = "39.938838";
 var LNG = "116.368624";
 var RESULT_LEVEL = "complete";
 var FILE_PATH = ""
-// 个性化参数，注意需进行两层转义
-var PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"2894c985bf8b1111c6728db79d3479ae\\\\\\\"}";
+// 个性化参数，需转义
+var PERS_PARAM = "{\\\"auth_id\\\":\\\"2894c985bf8b1111c6728db79d3479ae\\\"}";
 
 var X_CurTime = Math.floor(Date.now()/1000);
 var param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"aue\":\""+AUE+"\",\"scene\":\""+SCENE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}";

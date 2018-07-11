@@ -36,8 +36,8 @@ public class WebaiuiDemo {
 	private static final String AUTH_ID = "2894c985bf8b1111c6728db79d3479ae";
 	private static final String AUE = "raw";
 	private static final String FILE_PATH = "";
-	// 个性化参数，注意需进行两层转义
-	private static final String PERS_PARAM = "{\\\\\\\"auth_id\\\\\\\":\\\\\\\"2894c985bf8b1111c6728db79d3479ae\\\\\\\"}";
+	// 个性化参数，需转义
+	private static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"2894c985bf8b1111c6728db79d3479ae\\\"}";
 	
 	public static void main(String[] args) throws IOException,ParseException, InterruptedException{
 		Map<String, String> header = buildHeader();
