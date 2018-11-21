@@ -42,7 +42,8 @@ class WebaiuiDemo{
     }
 	
 	private static Dictionary<String,String> buildHeader(){
-		String curTime = DateTime.Now.Second.ToString();
+		TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+		string curTime = Convert.ToInt64(ts.TotalSeconds).ToString();
 		String param = "{\"aue\":\""+AUE+"\",\"result_level\":\""+RESULT_LEVEL+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\"}";
 		//使用个性化参数时参数格式如下：
 		//String param = "{\"aue\":\""+AUE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE+"\",\"pers_param\":\""+PERS_PARAM+"\"}";
