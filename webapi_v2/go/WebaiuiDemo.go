@@ -46,9 +46,9 @@ func main() {
 
 func buildHeader()(header map[string]string)  {
         curTime := strconv.Itoa(int(time.Now().Unix()))
-        param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\"}"
-        // 使用个性化参数时参数格式如下：
-        // param := "{\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"result_level\":\"" + RESULT_LEVEL + "\",\"aue\":\"" + AUE + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\",\"pers_param\":\"" + PERS_PARAM + "\"}"
+        param := fmt.Sprintf(`{"lat":"%v","lng":"%v","result_level":"%v","aue":"%v","auth_id":"%v","data_type":"%v","sample_rate":"%v","scene":"%v"}`, LAT, LNG, RESULT_LEVEL, AUE, AUTH_ID, DATA_TYPE, SAMPLE_RATE, SCENE)
+	// 使用个性化参数时参数格式如下：
+	// param := fmt.Sprintf(`{"lat":"%v","lng":"%v","result_level":"%v","aue":"%v","auth_id":"%v","data_type":"%v","sample_rate":"%v","scene":"%v","pers_param":"%v"}`, LAT, LNG, RESULT_LEVEL, AUE, AUTH_ID, DATA_TYPE, SAMPLE_RATE, SCENE,PERS_PARAM)
         paramBase64 := base64.StdEncoding.EncodeToString([]byte(param))
         checkSum := MD5Encode(API_KEY + curTime + paramBase64)
         header = make(map[string]string)
