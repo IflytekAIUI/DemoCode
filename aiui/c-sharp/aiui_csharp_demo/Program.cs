@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Runtime.InteropServices;
 using System.IO;
 using aiui;
 using NAudio.Wave;
@@ -141,7 +139,7 @@ namespace aiui_csharp_demo
             Thread.Sleep(40);
 
             //writeText
-            byte[] text = Encoding.UTF8.GetBytes("合肥明天天气怎么样？");
+            byte[] text = Encoding.UTF8.GetBytes("你会唱小星星么？");
 
             IBuffer buf = IBuffer.FromData(text, text.Length);
             IAIUIMessage msg_write_text = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=text,text_encoding=utf-8", buf);
