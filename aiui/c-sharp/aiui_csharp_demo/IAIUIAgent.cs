@@ -12,7 +12,7 @@ namespace aiui
         private AIUIMessageCallback messageCallback = null;
         private AIUIMessageCallback_ onEvent_ = null;
 
-        private void OnEvent(IntPtr ev_)
+        private void OnEvent(IntPtr ev_, IntPtr data)
         {
             messageCallback?.Invoke(new IAIUIEvent(ev_));
         }
@@ -21,7 +21,7 @@ namespace aiui
         {
             messageCallback = cb;
             onEvent_ = new AIUIMessageCallback_(OnEvent);
-            mAgent = aiui_agent_create(Marshal.StringToHGlobalAnsi(param), onEvent_);
+            mAgent = aiui_agent_create(Marshal.StringToHGlobalAnsi(param), onEvent_, IntPtr.Zero);
         }
 
         public static IAIUIAgent Create(string param, AIUIMessageCallback cb)
@@ -54,10 +54,10 @@ namespace aiui
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void AIUIMessageCallback_(IntPtr ev);
+        private delegate void AIUIMessageCallback_(IntPtr ev, IntPtr data);
 
         [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        private extern static IntPtr aiui_agent_create(IntPtr param, AIUIMessageCallback_ cb);
+        private extern static IntPtr aiui_agent_create(IntPtr param, AIUIMessageCallback_ cb, IntPtr data);
 
         [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         private extern static void aiui_agent_send_message(IntPtr agent, IntPtr msg);

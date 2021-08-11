@@ -7,6 +7,8 @@ using NAudio.Wave;
 using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.NetworkInformation;
+using System.Security.Cryptography;
 
 namespace aiui_csharp_demo
 {
@@ -106,9 +108,40 @@ namespace aiui_csharp_demo
                         }
                     }
                     break;
+                case AIUIConstant.EVENT_ERROR:
+                    {
+                        Console.WriteLine("ERROR: code {0}, info: {1}", ev.GetArg1(), ev.GetInfo());
+                    }
+                    break;
+
             }
         }
 
+        public static string GetMac()
+        {
+            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface ni in interfaces)
+            {
+                if(ni.OperationalStatus == OperationalStatus.Up)
+                {
+                    byte[] result = Encoding.Default.GetBytes(ni.GetPhysicalAddress().ToString());    //tbPass为输入密码的文本框
+                    byte[] output = new MD5CryptoServiceProvider().ComputeHash(result);
+
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < output.Length; i++)
+                    {
+                        builder.Append(output[i].ToString("x2"));
+                    }
+
+                    return builder.ToString();
+                }
+   
+            }
+
+            return "1234567890987654321234567890987"; //默认值
+        }
+
+        static IAIUIAgent agent = null;
         static void Main(string[] args)
         {
             Console.WriteLine("start.......");
@@ -117,10 +150,15 @@ namespace aiui_csharp_demo
             AIUISetting.SetAIUIDir(".\\AIUI\\");
             AIUISetting.SetLogLevel(AIUISetting.LogLevel._debug);
             AIUISetting.SetNetLogLevel(AIUISetting.LogLevel._debug);
+            string mac_addr = GetMac();
+
+            Console.WriteLine("mac_addr: {0}", mac_addr);
+
+            AIUISetting.setSystemInfo("sn", mac_addr); // 设备唯一id
 
             string cfg = File.ReadAllText(".\\AIUI\\cfg\\aiui.cfg");
 
-            IAIUIAgent agent = IAIUIAgent.Create(cfg, onEvent);
+            agent = IAIUIAgent.Create(cfg, onEvent);
 
             // start 
             IAIUIMessage msg_start = IAIUIMessage.Create(AIUIConstant.CMD_START, 0, 0, "", aiui.IBuffer.Zero);
@@ -139,7 +177,7 @@ namespace aiui_csharp_demo
             Thread.Sleep(40);
 
             //writeText
-            byte[] text = Encoding.UTF8.GetBytes("你会唱小星星么？");
+            byte[] text = Encoding.UTF8.GetBytes("合肥明天天气怎么样？");
 
             IBuffer buf = IBuffer.FromData(text, text.Length);
             IAIUIMessage msg_write_text = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=text,text_encoding=utf-8", buf);
@@ -178,33 +216,33 @@ namespace aiui_csharp_demo
             s_WaveIn.WaveFormat = new WaveFormat(16000, 1);
 
             s_WaveIn.BufferMilliseconds = 1000;
-            s_WaveIn.DataAvailable += new EventHandler<WaveInEventArgs>(SendCaptureSamples);
+            s_WaveIn.DataAvailable += s_WaveIn_DataAvailable;
             s_WaveIn.StartRecording();
-            
-            void SendCaptureSamples(object sender, WaveInEventArgs e)
-            {
-                int length = e.Buffer.Length;
-                byte[] bufferSrc = new byte[length];
-                Array.Copy(e.Buffer, bufferSrc, length);
-
-                byte[] bufTmp = new byte[1280];
-                int position = 0;
-                int dataLen = 1280;
-                while (position <= length)
-                {
-                    if (length - position < 1280)
-                    {
-                        dataLen = length - position;
-                    }
-
-                    Buffer.BlockCopy(bufferSrc, position, bufTmp, 0, dataLen);
-                    position = position + 1280;
-                    IBuffer buf_1 = IBuffer.FromData(bufTmp, 1280);
-                    IAIUIMessage msg_write_audio = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=audio,interact_mode=continuous", buf_1);
-                    agent.SendMessage(msg_write_audio);
-                    //Thread.Sleep(40);
-                }
-            }
         }
+
+        static void s_WaveIn_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            int length = e.Buffer.Length;
+            byte[] bufferSrc = new byte[length];
+            Array.Copy(e.Buffer, bufferSrc, length);
+
+            byte[] bufTmp = new byte[1280];
+            int position = 0;
+            int dataLen = 1280;
+            while (position <= length)
+            {
+                if (length - position < 1280)
+                {
+                    dataLen = length - position;
+                }
+
+                Buffer.BlockCopy(bufferSrc, position, bufTmp, 0, dataLen);
+                position = position + 1280;
+                IBuffer buf_1 = IBuffer.FromData(bufTmp, 1280);
+                IAIUIMessage msg_write_audio = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=audio,interact_mode=continuous", buf_1);
+                agent.SendMessage(msg_write_audio);
+                //Thread.Sleep(40);
+            }
+        } 
     }
 }
