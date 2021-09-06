@@ -47,6 +47,11 @@ namespace aiui
             return aiui_set_data_log_dir(Marshal.StringToHGlobalAnsi(dir));
         }
 
+        public static void setSystemInfo(string key, string val)
+        {
+            aiui_set_system_info(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(val));
+        }
+
         public static bool setRawAudioDir(string dir)
         {
             return aiui_set_raw_audio_dir(Marshal.StringToHGlobalAnsi(dir));
