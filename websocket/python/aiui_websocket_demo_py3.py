@@ -99,7 +99,7 @@ if __name__ == '__main__':
         connParam = "?appid=" + app_id + "&checksum=" + checksum + "&param=" + paramBase64 + "&curtime=" + str(
             curTime) + "&signtype=md5"
 
-        ws = WsapiClient(base_url + connParam, protocols=['chat'])
+        ws = WsapiClient(base_url + connParam, protocols=['chat'], headers=[("Origin", "https://wsapi.xfyun.cn")])
         ws.connect()
         ws.run_forever()
     except KeyboardInterrupt:
