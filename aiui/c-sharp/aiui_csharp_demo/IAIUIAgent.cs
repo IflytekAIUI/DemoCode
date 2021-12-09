@@ -35,7 +35,7 @@ namespace aiui
                 aiui_agent_send_message(mAgent, msg.Ptr);
         }
 
-        public void Destroy()
+        ~IAIUIAgent()
         {
             if (IntPtr.Zero != mAgent)
             {

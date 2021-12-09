@@ -18,7 +18,7 @@ namespace aiui
             return new IAIUIMessage(tmp);
         }
 
-        public void Destroy()
+        ~IAIUIMessage()
         {
             if (IntPtr.Zero != Ptr)
             {

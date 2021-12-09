@@ -163,7 +163,7 @@ namespace aiui_csharp_demo
             // start 
             IAIUIMessage msg_start = IAIUIMessage.Create(AIUIConstant.CMD_START, 0, 0, "", aiui.IBuffer.Zero);
             agent.SendMessage(msg_start);
-            msg_start.Destroy();
+            msg_start = null;
 
             Console.WriteLine("start.......");
             Thread.Sleep(40);
@@ -171,7 +171,7 @@ namespace aiui_csharp_demo
             //wakeup
             IAIUIMessage msg_wakeup = IAIUIMessage.Create(AIUIConstant.CMD_WAKEUP, 0, 0, "", aiui.IBuffer.Zero);
             agent.SendMessage(msg_wakeup);
-            msg_wakeup.Destroy();
+            msg_wakeup = null;
             Console.WriteLine("wakeup.......");
 
             Thread.Sleep(40);
@@ -182,7 +182,7 @@ namespace aiui_csharp_demo
             IBuffer buf = IBuffer.FromData(text, text.Length);
             IAIUIMessage msg_write_text = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=text,text_encoding=utf-8", buf);
             agent.SendMessage(msg_write_text);
-            msg_write_text.Destroy();
+            msg_write_text = null;
 
             Thread.Sleep(40);
             startRecord(agent);
@@ -239,9 +239,9 @@ namespace aiui_csharp_demo
                 Buffer.BlockCopy(bufferSrc, position, bufTmp, 0, dataLen);
                 position = position + 1280;
                 IBuffer buf_1 = IBuffer.FromData(bufTmp, 1280);
-                IAIUIMessage msg_write_audio = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=audio,interact_mode=continuous", buf_1);
+                IAIUIMessage msg_write_audio = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=audio", buf_1);
                 agent.SendMessage(msg_write_audio);
-                //Thread.Sleep(40);
+                msg_write_audio = null;
             }
         } 
     }
