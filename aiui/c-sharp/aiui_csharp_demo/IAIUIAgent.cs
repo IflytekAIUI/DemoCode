@@ -14,7 +14,9 @@ namespace aiui
 
         private void OnEvent(IntPtr ev_, IntPtr data)
         {
-            messageCallback?.Invoke(new IAIUIEvent(ev_));
+            IAIUIEvent ev = new IAIUIEvent(ev_);
+            messageCallback?.Invoke(ev);
+            ev = null;
         }
 
         private IAIUIAgent(string param, AIUIMessageCallback cb)
@@ -37,11 +39,19 @@ namespace aiui
 
         ~IAIUIAgent()
         {
+            Destroy();
+        }
+
+        public void Destroy()
+        {
             if (IntPtr.Zero != mAgent)
             {
                 aiui_agent_destroy(mAgent);
                 mAgent = IntPtr.Zero;
             }
+
+            messageCallback = null;
+            onEvent_ = null;
         }
 
         public static string Version()

@@ -20,7 +20,12 @@ namespace aiui
 
         ~IAIUIMessage()
         {
-            if (IntPtr.Zero != Ptr)
+            Destroy();
+        }
+
+        public void Destroy()
+        {
+            if (Ptr != IntPtr.Zero)
             {
                 aiui_msg_destroy(Ptr);
                 Ptr = IntPtr.Zero;

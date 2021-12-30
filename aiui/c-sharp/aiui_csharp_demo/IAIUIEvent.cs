@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 
 namespace aiui
 {
     class IAIUIEvent
     {
         private IntPtr mEvent;
+        private IDataBundle mBundle;
 
         public IAIUIEvent(IntPtr ev)
         {
             mEvent = ev;
+            mBundle = new IDataBundle(aiui_event_databundle(mEvent));
         }
 
         public int GetEventType()
@@ -31,18 +32,21 @@ namespace aiui
         public string GetInfo()
         {
             IntPtr temp = aiui_event_info(mEvent);
+            string info = Marshal.PtrToStringAnsi(temp).ToString();
+            temp = IntPtr.Zero;
 
-            int size = aiui_strlen(temp);
+            return info;
+        }
 
-            byte[] str_ptr = new byte[size];
-            Marshal.Copy(temp, str_ptr, 0, size);
-
-            return System.Text.Encoding.UTF8.GetString(str_ptr);
+        ~IAIUIEvent()
+        {
+            mEvent = IntPtr.Zero;
+            mBundle = null;
         }
 
         public IDataBundle GetData()
         {
-            return new IDataBundle(aiui_event_databundle(mEvent));
+            return mBundle;
         }
 
         [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
@@ -59,10 +63,5 @@ namespace aiui
 
         [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr aiui_event_databundle(IntPtr ev);
-
-        [DllImport("kernel32", EntryPoint= "lstrlenA", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
-        private static extern int aiui_strlen(IntPtr str);
     }
 }
-
-
