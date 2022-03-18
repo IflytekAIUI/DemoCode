@@ -4,18 +4,49 @@ using System.Threading;
 using WebSocketSharp;
 using System.Security.Cryptography;
 using System.IO;
+using System.Net.NetworkInformation;
 
 namespace aiui_ws_csharp_demo
 {
+
     class Program
     {
+        public static string GetAuthId()
+        {
+            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+            string mac = "";
+            foreach (NetworkInterface ni in interfaces)
+            {
+                if (ni.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                {
+                    mac += ni.GetPhysicalAddress().ToString();
+                }
+            }
+
+            byte[] result = Encoding.Default.GetBytes(mac);
+            result = new MD5CryptoServiceProvider().ComputeHash(result);
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < result.Length; i++)
+            {
+                builder.Append(result[i].ToString("x2"));
+            }
+
+            return builder.ToString();
+        }
+
         private static string BASE_URL = "ws://wsapi.xfyun.cn/v1/aiui";
         private static string ORIGIN = "http://wsapi.xfyun.cn";
 
+		/*
+			请在AIUI开放平台应用配置下关闭ip白名单
+			并替换一下对应的 APPID 和 KEY
+		*/
         private const string APPID = "****";
         private const string APIKEY = "****";
+		
         private const string AUE = "raw";
-        private string AUTH_ID = "ac30105366ea460f9ff08ddac0c4f71e";
         private const string DATA_TYPE = "audio";
         private const string SAMPLE_RATE = "16000";
         private const string SCENE = "main";
@@ -26,7 +57,7 @@ namespace aiui_ws_csharp_demo
         // 结束数据发送标记（必传）
         private static string END_FLAG = "--end--";
         // 配置参数
-        private static string param = "{\"result_level\":\"plain\",\"auth_id\":\"ac30105366ea460f9ff08ddac0c4f71e\",\"data_type\":\"audio\",\"aue\":\"raw\",\"scene\":\"main\",\"sample_rate\":\"16000\"}";
+        private static string param = "{{\"result_level\":\"plain\",\"auth_id\":\"{0}\",\"data_type\":\"audio\",\"aue\":\"raw\",\"scene\":\"main\",\"sample_rate\":\"16000\"}}";
 
         private WebSocket server;
 
@@ -80,7 +111,7 @@ namespace aiui_ws_csharp_demo
         // 拼接握手参数
         private static string getHandShakeParams()
         {
-            string paramBase64 = EncodeBase64(param);
+            string paramBase64 = EncodeBase64(String.Format(param, GetAuthId()));
             string curtime = currentTimeMillis();
             string signtype = "sha256";
             string originStr = APIKEY + curtime + paramBase64;
