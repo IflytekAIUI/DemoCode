@@ -46,9 +46,10 @@ Windows  x86, amd64                                   C/C++    .h头文件 + .li
 Linux和Windows两个平台上调用的都是C++ SDK，接口完全一样，这里放在一起进行介绍。
 
 2.1 准备工作
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
 2.1.1 引入SDK包
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 将头文件（位于SDK包的include目录）和SDK库（Linux上为 ``libaiui.so``，Windows上为 ``aiui.lib`` 和  ``aiui.dll``）放到目标工程中。
 
@@ -401,6 +402,10 @@ SDK只有在初始化成功之后才能使用，否则一创建接口对象即�
 
 .. versionadded:: 5.6.1071.0000
 
+
+2.1.6 SDK状态说明
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 此时若无其他错误，sdk将进入 ``STATE_IDLE`` 待工作状态
 
 =========================== ========
@@ -412,7 +417,7 @@ STATE_IDLE                  **服务未开启**
 STATE_READY                  **待唤醒状态**
 
                              此时可以通过语音（唤醒词）或者直接向服务发送CMD_WAKEUP消息唤醒服务。
-							 
+
                              调用AIUIAgent.createAgent创建对象之后，服务即为就绪状态
 STATE_WORKING               **工作状态**
 
@@ -424,12 +429,32 @@ STATE_WORKING               **工作状态**
 .. image::_static/screenshot_1519613427018.4507411a.png
 
 ============ ========
-操作名称	      说明
-start	        启动后默认状态或者向SDK发送 ``CMD_START`` 消息。
-stop	        向SDK发送 ``CMD_STOP`` 消息。
+操作名称	 说明
+start	     启动后默认状态或者向SDK发送 ``CMD_START`` 消息。
+stop	     向SDK发送 ``CMD_STOP`` 消息。
 wakeup	     说出定制唤醒词（默认为“小飞小飞”），或者向SDK发送 ``CMD_WAKEUP`` 消息。
-reset_wakeup  向SDK发送 ``CMD_SLEEP`` 消息。
-sleep	        休眠，当一段时间内无有效交互（语义）发生。
-re_wakeup	  在STATE_WORKING状态下，再次说出唤醒词，或者向SDK发送 ``CMD_WAKEUP`` 消息。
+reset_wakeup 向SDK发送 ``CMD_SLEEP`` 消息。
+sleep	     休眠，当一段时间内无有效交互（语义）发生。
+re_wakeup	 在STATE_WORKING状态下，再次说出唤醒词，或者向SDK发送 ``CMD_WAKEUP`` 消息。
 ============ ========
 
+2.2 消息发送
+------------------------
+
+以手动唤醒为例，说明消息发送的流程，前期初始化SDK成功，会生成一个AIUI ``agent`` 句柄，发送消息需要用到。
+
+ .. code-block:: c++
+    :linenos:
+
+    IAIUIMessage* wakeupMsg = IAIUIMessage::create(AIUIConstant::CMD_WAKEUP);
+    agent->sendMessage(wakeupMsg);
+    wakeupMsg->destroy();
+
+
+- 使用重载的 ``IAIUIMessage::create`` 函数，指定消息类型，创建一个消息。
+- 用SDK初始化得来的 ``agent`` 将消息发送到AIUI内部，此步骤是异步的，会马上返回。
+- 调用消息体的 ``destroy`` 方法，销毁占用的资源。
+- 一个最简单的消息就发送完成了， 待AIUI内部处理好之后，在事件回调 ``MyListener::onEvent`` 就可以收到AIUI状态变化
+
+ .. note::
+   命令类型 & 消息类型 可翻阅头文件。
