@@ -41,7 +41,7 @@ Windows  x86, amd64                                   C/C++    .h头文件 + .li
    支持所有 ``gnu-gcc`` 编译的平台，客户可以提供编译链来交叉编译
 
 
-2 Windows & Windows 平台
+2 Linux & Windows 平台
 ------------------------
 Linux和Windows两个平台上调用的都是C++ SDK，接口完全一样，这里放在一起进行介绍。
 
@@ -108,6 +108,7 @@ AIUI集成了众多能力，一般不可能全部都用得上，可以通过配�
  res_path                    string   AIUI/assets/evad.jet   否      指定引擎所需要的资源路径
  vad_bos                     string   "5000"                 否      前端点超时时间，默认为5000ms
  vad_eos                     string   "1000"                 否      后端点超时时间，默认为1000ms
+ cloud_vad_enable            bool     false                  否      适配云端语义VAD [#f2]_
  =========================== ======== ====================== ====== ==================================
 
 - 云端识别段配置 ``iat``
@@ -438,7 +439,7 @@ sleep	     休眠，当一段时间内无有效交互（语义）发生。
 re_wakeup	 在STATE_WORKING状态下，再次说出唤醒词，或者向SDK发送 ``CMD_WAKEUP`` 消息。
 ============ ========
 
-2.2 消息发送
+2.2 命令发送
 ------------------------
 
 以手动唤醒为例，说明消息发送的流程，前期初始化SDK成功，会生成一个AIUI ``agent`` 句柄，发送消息需要用到。
@@ -455,6 +456,23 @@ re_wakeup	 在STATE_WORKING状态下，再次说出唤醒词，或者向SDK发�
 - 用SDK初始化得来的 ``agent`` 将消息发送到AIUI内部，此步骤是异步的，会马上返回。
 - 调用消息体的 ``destroy`` 方法，销毁占用的资源。
 - 一个最简单的消息就发送完成了， 待AIUI内部处理好之后，在事件回调 ``MyListener::onEvent`` 就可以收到AIUI状态变化
+
+2.2 消息接收
+------------------------
+ .. code-block:: c++
+   :linenos:
+
+   class MyListener : public IAIUIListener
+   {
+   public:
+      void onEvent(const IAIUIEvent& event) override
+      {
+         switch(event.getType()) {
+            case AIUIConstant::EVENT_RESULT:
+            .....
+            break;
+      }
+   }
 
  .. note::
    命令类型 & 消息类型 可翻阅头文件。
