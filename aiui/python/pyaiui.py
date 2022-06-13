@@ -272,6 +272,10 @@ class IDataBundle:
         self.aiui_db_binary = aiui.aiui_db_binary
         self.aiui_db_binary.restype = ctypes.c_void_p
         self.aiui_db_binary.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p]
+        
+        self.aiui_strlen = aiui.aiui_strlen
+        self.aiui_strlen.restype = ctypes.c_int
+        self.aiui_strlen.argtypes = [ctypes.c_char_p]
 
     def __bool__(self):
         return self.aiui_db is not None
@@ -287,7 +291,11 @@ class IDataBundle:
     def getString(self, key: str, defaultVal: str):
         s = self.aiui_db_string(self.aiui_db, ctypes.c_char_p(key.encode('utf-8')),
                                 ctypes.c_char_p(defaultVal.encode('utf-8')))
-        return str(s, encoding="utf-8")
+        len = self.aiui_strlen(s)
+        arrayType = ctypes.c_char * len
+        pa = ctypes.cast(s, ctypes.POINTER(arrayType))                        
+                                
+        return str(bytes(pa.contents), encoding='utf-8')
 
     def getBinary(self, key: str):
         datalen = ctypes.c_int(0)
@@ -297,7 +305,17 @@ class IDataBundle:
         arrayType = ctypes.c_char * datalen.value
         pa = ctypes.cast(s, ctypes.POINTER(arrayType))
 
-        return bytes(pa.contents)
+        return pa.contents
+        
+    def getBinaryAsStr(self, key: str):
+        datalen = ctypes.c_int(0)
+
+        s = self.aiui_db_binary(self.aiui_db, ctypes.c_char_p(key.encode('utf-8')), ctypes.pointer(datalen))
+
+        arrayType = ctypes.c_char * (datalen.value - 1)
+        pa = ctypes.cast(s, ctypes.POINTER(arrayType))
+
+        return str(bytes(pa.contents), encoding='utf-8')
 
 
 class IAIUIEvent:
@@ -453,8 +471,8 @@ class IAIUIAgent:
 class LogLevel(IntEnum):
     """日志等级"""
 
-    Info = 0
-    Debug = 1
+    Debug = 0
+    Info = 1
     Warn = 2
     Error = 3
     DisableAll = 4
