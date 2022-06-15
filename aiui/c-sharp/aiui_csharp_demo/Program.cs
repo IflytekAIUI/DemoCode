@@ -166,15 +166,6 @@ namespace aiui_csharp_demo
 
             IAIUIAgent agent = IAIUIAgent.Create(cfg, onEvent);
 
-
-            // start 
-            //IAIUIMessage msg_start = IAIUIMessage.Create(AIUIConstant.CMD_START, 0, 0, "", IBuffer.Zero);
-            //agent.SendMessage(msg_start);
-            //msg_start.Destroy();
-            //msg_start = null;
-
-            //Thread.Sleep(400);
-
             //wakeup
             IAIUIMessage msg_wakeup = IAIUIMessage.Create(AIUIConstant.CMD_WAKEUP, 0, 0, "", IBuffer.Zero);
             agent.SendMessage(msg_wakeup);
@@ -183,8 +174,8 @@ namespace aiui_csharp_demo
 
             Thread.Sleep(400);
 
-            
-            //writeText
+
+            //以下为文本语义
             /*
             byte[] text = Encoding.UTF8.GetBytes("合肥明天天气怎么样");
 
@@ -196,56 +187,53 @@ namespace aiui_csharp_demo
             Thread.Sleep(40);
             */
 
+            // 以下为系统录音
             /*
-           IAIUIMessage msg_start_r = IAIUIMessage.Create(AIUIConstant.CMD_START_RECORD, 0, 0,
-               "data_type=audio,interact_mode=continuous", IBuffer.Zero);
-           agent.SendMessage(msg_start_r);
-           msg_start_r.Destroy();
-           msg_start_r = null;
+            IAIUIMessage msg_start_r = IAIUIMessage.Create(AIUIConstant.CMD_START_RECORD, 0, 0,
+                "data_type=audio,interact_mode=continuous", IBuffer.Zero);
+            agent.SendMessage(msg_start_r);
+            msg_start_r.Destroy();
+            msg_start_r = null;
 
-           Console.WriteLine("start record...");
+            Console.WriteLine("start record...");
 
-           Console.ReadKey();
+            Console.ReadKey();
 
-           IAIUIMessage msg_stop_r = IAIUIMessage.Create(AIUIConstant.CMD_STOP_RECORD, 0, 0,
-               "data_type=audio,interact_mode=continuous", IBuffer.Zero);
-           agent.SendMessage(msg_stop_r);
-           msg_stop_r.Destroy();
-           msg_stop_r = null;
+            IAIUIMessage msg_stop_r = IAIUIMessage.Create(AIUIConstant.CMD_STOP_RECORD, 0, 0,
+                "data_type=audio,interact_mode=continuous", IBuffer.Zero);
+            agent.SendMessage(msg_stop_r);
+            msg_stop_r.Destroy();
+            msg_stop_r = null;
 
-           Console.WriteLine("stop record...");
+            Console.WriteLine("stop record...");
 
-           Console.ReadKey();
-           */
+            Console.ReadKey();
+            */
 
+            // 以下为读取音频文件
+            FileStream pcm = new FileStream(".\\AIUI\\audio\\test.pcm", FileMode.Open, FileAccess.Read);
+            byte[] buffur = new byte[1280];
 
-           FileStream pcm = new FileStream(".\\AIUI\\audio\\test.pcm", FileMode.Open, FileAccess.Read);
-           byte[] buffur = new byte[1280];
+            int count = 0;
+            // 从文件读取并显示行，直到文件的末尾 
+            while ((count = pcm.Read(buffur, 0, 1280)) != 0)
+            {
+                IBuffer buf_1 = IBuffer.FromData(buffur, 1280);
+                IAIUIMessage msg_write_audio = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=audio", buf_1);
+                agent.SendMessage(msg_write_audio);
+                msg_write_audio.Destroy();
+                msg_write_audio = null;
+                buf_1 = null;
 
+                pcm.Position += count;
 
-               int count = 0;
-               // 从文件读取并显示行，直到文件的末尾 
-               while ((count = pcm.Read(buffur, 0, 1280)) != 0)
-               {
-                   IBuffer buf_1 = IBuffer.FromData(buffur, 1280);
-                   IAIUIMessage msg_write_audio = IAIUIMessage.Create(AIUIConstant.CMD_WRITE, 0, 0, "data_type=audio", buf_1);
-                   agent.SendMessage(msg_write_audio);
-                   msg_write_audio.Destroy();
+                Thread.Sleep(40);
+            }
 
-                   msg_write_audio = null;
-                   buf_1 = null;
+            Console.WriteLine("finished!");
+            pcm.Position = 0;
 
-                   pcm.Position += count;
-
-                   Thread.Sleep(40);
-               }
-
-               Console.WriteLine("finished!");
-               pcm.Position = 0;
-
-               Thread.Sleep(5000);
-
-
+            Thread.Sleep(5000);
 
             agent.Destroy();
 

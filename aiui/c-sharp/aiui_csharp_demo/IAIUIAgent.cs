@@ -21,9 +21,12 @@ namespace aiui
 
         private IAIUIAgent(string param, AIUIMessageCallback cb)
         {
-            messageCallback = cb;
-            onEvent_ = new AIUIMessageCallback_(OnEvent);
-            mAgent = aiui_agent_create(Marshal.StringToHGlobalAnsi(param), onEvent_, IntPtr.Zero);
+            if (IntPtr.Zero == mAgent)
+            {
+                messageCallback = cb;
+                onEvent_ = new AIUIMessageCallback_(OnEvent);
+                mAgent = aiui_agent_create(Marshal.StringToHGlobalAnsi(param), onEvent_, IntPtr.Zero);
+            }
         }
 
         public static IAIUIAgent Create(string param, AIUIMessageCallback cb)
