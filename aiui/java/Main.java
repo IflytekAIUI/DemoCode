@@ -115,7 +115,7 @@ public class Main {
      */
     private static void writeAudio() {
         if (mAgent != null) {
-            mAgent.sendMessage(new AIUIMessage(AIUIConstant.CMD_START_RECORD, 0,0,"data_type=audio,interact_mode=continuous,disable_rec=0,tts_res_type=url", null));
+            mAgent.sendMessage(new AIUIMessage(AIUIConstant.CMD_START_RECORD, 0,0,"data_type=audio", null));
         }
     }
 
