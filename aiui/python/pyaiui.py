@@ -6,14 +6,20 @@ import ctypes
 import os
 import functools
 from enum import IntEnum, unique
+import platform
 
 if not hasattr(sys, "version_info") or sys.version_info < (3, 7):
     print("Sorry, you aren't running on Python 3.7 or later\n")
     print("Please upgrade to 3.7 or later.\n")
     sys.exit(1)
 
+aiui = None
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-aiui = ctypes.windll.LoadLibrary(BASE_DIR + "/aiui.dll")
+if platform.system() == "Windows":
+    aiui = ctypes.windll.LoadLibrary(BASE_DIR + "\\aiui.dll")
+else :
+    aiui = ctypes.cdll.LoadLibrary(BASE_DIR + "/libaiui.so")
 
 
 class AIUIConstant(IntEnum):
