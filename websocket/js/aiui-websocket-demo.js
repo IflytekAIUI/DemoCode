@@ -46,15 +46,19 @@ client.on('connect', function(connection) {
 
     function sendMsg() {
         if (connection.connected) {
-            // 读取音频文件
-            var audioData = fs.readFileSync('D:/output/xxx.pcm', {
-              encoding: null,
-              flag: 'r'
-            })
-            // 发送音频数据
-            connection.sendBytes(audioData);
-            // 发送结束标记
-            connection.sendUTF("--end--");
+			
+			let audioFile = fs.createReadStream('./weather.pcm');
+			let idx = 0;
+			
+			audioFile.on("data", function(data) {
+				console.log("发送音频块 ", idx++);
+				
+				connection.sendBytes(data);
+			});
+			
+			audioFile.on("close", function() {
+				connection.sendUTF("--end--");
+			});
         }
     }
     // 发送数据
