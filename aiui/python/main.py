@@ -6,6 +6,8 @@ import pyaiui
 # 为什么是json5, 因为json5可以解析有注释的json
 import json5
 import os
+import hashlib
+import uuid
 
 print(pyaiui.aiui_get_version())
 
@@ -92,10 +94,16 @@ class MyEventLister(pyaiui.AIUIEventListener):
         elif evetType == pyaiui.AIUIConstant.EVENT_ERROR:
             print("Error code: {0}, info: {1}".format(event.getArg1(), event.getInfo()))
 
+
+def get_auth_id():
+    mac = uuid.UUID(int=uuid.getnode()).hex[-12:]
+    return hashlib.md5(":".join([mac[e:e + 2] for e in range(0, 11, 2)]).encode("utf-8")).hexdigest()
+
+
 # 为每一个设备设置对应唯一的SN（最好使用设备硬件信息(mac地址，设备序列号等）生成），
 # 以便正确统计装机量，避免刷机或者应用卸载重装导致装机量重复计数
 # 以下仅测试，不可用于生产环境
-pyaiui.AIUISetting.setSystemInfo("sn", "614184de-f61d-4a05-93b3-85d052fc4b10")
+pyaiui.AIUISetting.setSystemInfo("sn", get_auth_id())
 
 print(json5.dumps(cfg, quote_keys=True))
 
