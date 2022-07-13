@@ -5,7 +5,7 @@ namespace aiui
 {
     class AIUISetting
     {
-        public enum LogLevel { _info, _debug, _warn, _error, _none };
+        public enum LogLevel { _debug, _info, _warn, _error, _none };
 
         public static bool SetAIUIDir(string dir)
         {

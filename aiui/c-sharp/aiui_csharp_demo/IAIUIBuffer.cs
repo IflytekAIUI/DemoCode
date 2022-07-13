@@ -20,6 +20,11 @@ namespace aiui
             return new IBuffer(tmp);
         }
 
+        ~IBuffer()
+        {
+            mData = IntPtr.Zero;
+        }
+
         [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr aiui_create_buffer_from_data(ref byte data, int len);
     }

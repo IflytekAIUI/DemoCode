@@ -1,2 +1,3 @@
 1. 将平台下载的 aiui 库放在此目录下且重新命名为 aiui.dll
-2. 修改 AIUI/cfg/aiui.cfg 下的 appid
+2. 修改 AIUI/cfg/aiui.cfg 下的 appid 和 key
+3. 执行 python3 main.py

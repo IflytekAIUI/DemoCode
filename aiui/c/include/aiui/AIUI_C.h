@@ -1,32 +1,14 @@
 /**
- * @Author zrmei
- * @Create 2020/9/6 11:47
- */
-
+* AIUI_C.h
+*
+*  Created on: 2020年06月26日
+*      Author: AIUI开放平台（https://aiui.xfyun.cn/）
+*/
 #ifndef AIUI_SRC_AIUI_C_H
 #define AIUI_SRC_AIUI_C_H
 
-#ifdef _MSC_VER
-#   ifndef AIUI_WINDOWS
-#       define AIUI_WINDOWS
-#   endif
-#endif
-
-#if defined(AIUI_WINDOWS)
-#	undef AIUIEXPORT
-#	if defined(AIUI_LIB_COMPILING)
-#		define AIUIEXPORT __declspec(dllexport)
-#   	define AIUIAPI    __stdcall
-#	else
-#   	define AIUIEXPORT 
-#   	define AIUIAPI    __stdcall
-#	endif
-#else
-#	undef AIUIEXPORT
-#	define AIUIEXPORT __attribute__((visibility ("default")))
-#  	undef AIUIAPI
-#  	define AIUIAPI
-#endif
+#include <stddef.h>
+#include "AIUICommon.h"
 
 /* clang-format off */
 #ifdef __cplusplus
@@ -53,6 +35,8 @@ int AIUIEXPORT AIUIAPI aiui_event_arg2(const AIUIEvent ae);
 const char AIUIEXPORT * AIUIAPI aiui_event_info(const AIUIEvent ae);
 AIUIDataBundle AIUIEXPORT AIUIAPI aiui_event_databundle(const AIUIEvent ae);
 
+int AIUIEXPORT AIUIAPI aiui_strlen(const char * str);
+
 /**********************************AIUIBuffer***********************************/
 typedef void* AIUIBuffer;
 
@@ -63,39 +47,45 @@ AIUIBuffer AIUIEXPORT AIUIAPI aiui_create_buffer_from_data(const void* data, siz
 /**********************************AIUIMessage**********************************/
 typedef void* AIUIMessage;
 
-AIUIMessage AIUIEXPORT AIUIAPI aiui_msg_create(int msgType, int arg1 = 0, int arg2 = 0, const char* params = "", AIUIBuffer data = 0);
+AIUIMessage AIUIEXPORT AIUIAPI aiui_msg_create1(int msgType);
+AIUIMessage AIUIEXPORT AIUIAPI aiui_msg_create2(int msgType, int arg1);
+AIUIMessage AIUIEXPORT AIUIAPI aiui_msg_create3(int msgType, int arg1, int arg2);
+AIUIMessage AIUIEXPORT AIUIAPI aiui_msg_create4(int msgType, int arg1, int arg2, const char* params);
+AIUIMessage AIUIEXPORT AIUIAPI aiui_msg_create(int msgType, int arg1, int arg2, const char* params, AIUIBuffer data);
+
 void AIUIEXPORT AIUIAPI aiui_msg_destroy(AIUIMessage msg);
 
 /***********************************AIUI_Agent***********************************/
 typedef void* AIUIAgent;
-AIUIAgent AIUIEXPORT AIUIAPI aiui_agent_create(const char* params, AIUIMessageCallback callback, void *usrData);
+AIUIAgent AIUIEXPORT AIUIAPI aiui_agent_create(const char* params, AIUIMessageCallback callback, void *data);
 void AIUIEXPORT AIUIAPI aiui_agent_send_message(AIUIAgent agent, AIUIMessage msg);
 void AIUIEXPORT AIUIAPI aiui_agent_destroy(AIUIAgent agent);
 
-/***********************************IUI_Setting**********************************/
+/***********************************AIUI_Setting**********************************/
 
-enum LogLevel { _info, _debug, _warn, _error, _none };
+typedef enum { aiui_debug, aiui_info, aiui_warn, aiui_error, aiui_none } LogLevel;
 
-enum VersionType {
-    INTELLIGENT_HDW,    // 智能硬件版本
-    MOBILE_PHONE,       // 移动互联网版本
-    DESKTOP_PC          // 桌面PC版本
-};
+typedef enum  {
+   AIUI_INTELLIGENT_HDW,    /* 智能硬件版本 */
+   AIUI_MOBILE_PHONE,       /* 移动互联网版本 */
+   AIUI_DESKTOP_PC          /* 桌面PC版本 */
+} VersionType;
 
-bool AIUIEXPORT AIUIAPI aiui_set_aiui_dir(const char* szDir);
+int AIUIEXPORT AIUIAPI aiui_set_aiui_dir(const char* szDir);
 const char AIUIEXPORT * AIUIAPI aiui_get_aiui_dir();
 
-bool AIUIEXPORT AIUIAPI aiui_set_msc_dir(const char* szDir);
-bool AIUIEXPORT AIUIAPI aiui_set_msc_cfg(const char* szCfg);
-bool AIUIEXPORT AIUIAPI aiui_init_logger(const char* szLogDir = "");
+int AIUIEXPORT AIUIAPI aiui_set_msc_dir(const char* szDir);
+int AIUIEXPORT AIUIAPI aiui_set_msc_cfg(const char* szCfg);
+int AIUIEXPORT AIUIAPI aiui_init_logger(const char* szLogDir);
 void AIUIEXPORT AIUIAPI aiui_set_log_level(LogLevel level);
 void AIUIEXPORT AIUIAPI aiui_set_net_log_level(LogLevel level);
-void AIUIEXPORT AIUIAPI aiui_set_save_data_log(bool save, int logSizeMB = -1);
-bool AIUIEXPORT AIUIAPI aiui_set_data_log_dir(const char* szDir);
-bool AIUIEXPORT AIUIAPI aiui_set_raw_audio_dir(const char* dir);
-bool AIUIEXPORT AIUIAPI aiui_is_mobile_version();
+void AIUIEXPORT AIUIAPI aiui_set_save_data_log(int save, int logSizeMB);
+int AIUIEXPORT AIUIAPI aiui_set_data_log_dir(const char* szDir);
+int AIUIEXPORT AIUIAPI aiui_set_raw_audio_dir(const char* dir);
+int AIUIEXPORT AIUIAPI aiui_is_mobile_version();
 VersionType AIUIEXPORT AIUIAPI aiui_get_version_type();
 void AIUIEXPORT AIUIAPI aiui_set_system_info(const char* key, const char* val);
+int AIUIEXPORT AIUIAPI aiui_get_system_info(const char * key, char *out, int max_size);
 
 #ifdef __cplusplus
 };
@@ -103,4 +93,4 @@ void AIUIEXPORT AIUIAPI aiui_set_system_info(const char* key, const char* val);
 
 /* clang-format on */
 
-#endif    //AIUI_SRC_AIUI_C_H
+#endif    /* AIUI_SRC_AIUI_C_H */

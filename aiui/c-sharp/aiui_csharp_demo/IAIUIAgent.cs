@@ -14,14 +14,19 @@ namespace aiui
 
         private void OnEvent(IntPtr ev_, IntPtr data)
         {
-            messageCallback?.Invoke(new IAIUIEvent(ev_));
+            IAIUIEvent ev = new IAIUIEvent(ev_);
+            messageCallback?.Invoke(ev);
+            ev = null;
         }
 
         private IAIUIAgent(string param, AIUIMessageCallback cb)
         {
-            messageCallback = cb;
-            onEvent_ = new AIUIMessageCallback_(OnEvent);
-            mAgent = aiui_agent_create(Marshal.StringToHGlobalAnsi(param), onEvent_, IntPtr.Zero);
+            if (IntPtr.Zero == mAgent)
+            {
+                messageCallback = cb;
+                onEvent_ = new AIUIMessageCallback_(OnEvent);
+                mAgent = aiui_agent_create(Marshal.StringToHGlobalAnsi(param), onEvent_, IntPtr.Zero);
+            }
         }
 
         public static IAIUIAgent Create(string param, AIUIMessageCallback cb)
@@ -35,6 +40,11 @@ namespace aiui
                 aiui_agent_send_message(mAgent, msg.Ptr);
         }
 
+        ~IAIUIAgent()
+        {
+            Destroy();
+        }
+
         public void Destroy()
         {
             if (IntPtr.Zero != mAgent)
@@ -42,6 +52,9 @@ namespace aiui
                 aiui_agent_destroy(mAgent);
                 mAgent = IntPtr.Zero;
             }
+
+            messageCallback = null;
+            onEvent_ = null;
         }
 
         public static string Version()

@@ -337,5 +337,7 @@
 
         public const int CANCEL = 4;
 
+        public const string KEY_SERIAL_NUM = "sn";
+
     }
 }
