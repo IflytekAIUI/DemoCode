@@ -169,8 +169,6 @@ namespace aiui_ws_csharp_demo
                 while ((count = pcm.Read(buffur, 0, 1280)) != 0)
                 {
                     server.Send(buffur);
-                    pcm.Position += count;
-
                     Thread.Sleep(40);
                 }
 
