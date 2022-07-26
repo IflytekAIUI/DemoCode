@@ -2,12 +2,15 @@ package com.iflytek.aiui.websocketdemo;
 
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.codec.binary.Base64;
@@ -39,7 +42,7 @@ public class AiuiWsDemo {
 	// 结束数据发送标记（必传）
 	private static final String END_FLAG = "--end--";
 	// 配置参数
-	private static final String param = "{\"result_level\":\"plain\",\"auth_id\":\"894c985bf8b1111c6728db79d3479aef\",\"data_type\":\"audio\",\"aue\":\"raw\",\"scene\":\"main\",\"sample_rate\":\"16000\"}";
+	private static final String param = "{\"result_level\":\"plain\",\"auth_id\":\"" + getLocalMac() +"\",\"data_type\":\"audio\",\"aue\":\"raw\",\"scene\":\"main_box\",\"sample_rate\":\"16000\"}";
 
 	// main()方法，直接运行，控制台输出服务端结果
 	public static void main(String[] args) throws Exception {
@@ -48,10 +51,11 @@ public class AiuiWsDemo {
 		CountDownLatch countDownLatch = new CountDownLatch(1);
 		MyWebSocketClient client = new MyWebSocketClient(url, draft, countDownLatch);
 		client.connect();
+		
 		while (!client.getReadyState().equals(READYSTATE.OPEN)) {
-			System.out.println("连接中");
-			Thread.sleep(1000);
+			Thread.sleep(50);
 		}
+		
 		// 发送音频
 		byte[] bytes = new byte[CHUNCKED_SIZE];
 		try (RandomAccessFile raf = new RandomAccessFile(FILE_PATH, "r")) {
@@ -147,4 +151,31 @@ public class AiuiWsDemo {
 		}
 		return encdeStr;
 	}
+	
+    private static String getLocalMac() {
+        StringBuilder sb = new StringBuilder();
+        Enumeration<NetworkInterface> allNetInterfaces = null;
+
+        try {
+            allNetInterfaces = NetworkInterface.getNetworkInterfaces();
+            byte[] mac = null;
+            while (allNetInterfaces.hasMoreElements()) {
+                NetworkInterface netInterface = allNetInterfaces.nextElement();
+                if (netInterface.isLoopback() || netInterface.isVirtual() || netInterface.isPointToPoint() || !netInterface.isUp()) {
+                    continue;
+                } else {
+                    mac = netInterface.getHardwareAddress();
+                    if (mac != null) {
+                        for (int i = 0; i < mac.length; i++) {
+                            sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : "\n"));
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+        return DigestUtils.md5DigestAsHex(sb.toString().getBytes(StandardCharsets.UTF_8));
+    }
 }
