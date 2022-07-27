@@ -438,7 +438,7 @@ STATE_WORKING               **工作状态**
 
 具体的转换关系如下图所示：
 
-.. image::_static/screenshot_1519613427018.4507411a.png
+.. image::../_static/screenshot_1519613427018.4507411a.png
 
 ============ ========
 操作名称     说明
