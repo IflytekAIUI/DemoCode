@@ -225,8 +225,6 @@ namespace aiui_csharp_demo
                 msg_write_audio = null;
                 buf_1 = null;
 
-                pcm.Position += count;
-
                 Thread.Sleep(40);
             }
 
