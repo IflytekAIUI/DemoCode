@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace aiui
 {
@@ -32,8 +33,15 @@ namespace aiui
         public string GetInfo()
         {
             IntPtr temp = aiui_event_info(mEvent);
-            string info = Marshal.PtrToStringAnsi(temp).ToString();
+            int len = aiui_strlen(temp);
+
+            byte[] managedArray = new byte[len];
+            Marshal.Copy(temp, managedArray, 0, len);
+
+            string info = Encoding.UTF8.GetString(managedArray);
+           
             temp = IntPtr.Zero;
+            managedArray = null;
 
             return info;
         }
@@ -63,5 +71,8 @@ namespace aiui
 
         [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr aiui_event_databundle(IntPtr ev);
+
+        [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        private static extern int aiui_strlen(IntPtr str);
     }
 }
