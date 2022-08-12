@@ -75,10 +75,10 @@ AIUI免唤醒方案
     },
     "ivw":{
         //配置加载使用环形6mic免唤醒Vtn库
-        "mic_type": "mic6_circle",
+        "mic_type": "mic1",
         //开启免唤醒
         "zeroshot_enable": "1",
         "res_type":"path",
         //免唤醒词资源及vtn引擎唤醒配置
-        "res_path":"vtn/tv/tv_wakeup_word.bin;vtn/tv/tv_zeroshot.cfg"
+        "res_path":"vtn/tv/res.bin;vtn/tv/hlw.cfg"
     }
