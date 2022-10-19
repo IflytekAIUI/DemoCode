@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace aiui
 {
@@ -19,9 +20,36 @@ namespace aiui
 
         public string GetString(string key, string defVal)
         {
-            IntPtr tmp = aiui_db_string(mDataBundle, Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(defVal));
+            IntPtr temp = aiui_db_string(mDataBundle, Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(defVal));
 
-            return Marshal.PtrToStringAnsi(tmp);
+            int len = aiui_strlen(temp);
+
+            byte[] managedArray = new byte[len];
+            Marshal.Copy(temp, managedArray, 0, len);
+
+            string info = Encoding.UTF8.GetString(managedArray);
+
+            temp = IntPtr.Zero;
+
+            return info;
+        }
+
+        public string GetBinaryStr(string key)
+        {
+            int len = 0;
+            IntPtr tmp = aiui_db_binary(mDataBundle, Marshal.StringToHGlobalAnsi(key), ref len);
+
+            if (len == 0) return null;
+
+            byte[] managedArray = new byte[len - 1];
+            Marshal.Copy(tmp, managedArray, 0, len - 1);
+
+            string info = Encoding.UTF8.GetString(managedArray);
+
+            tmp = IntPtr.Zero;
+            managedArray = null;
+
+            return info;
         }
 
         public byte[] GetBinary(string key, ref int len)
@@ -47,5 +75,8 @@ namespace aiui
 
         [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr aiui_db_binary(IntPtr db, IntPtr key, ref int len);
+
+        [DllImport("aiui", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        private static extern int aiui_strlen(IntPtr str);
     }
 }

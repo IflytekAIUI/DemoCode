@@ -74,8 +74,9 @@ namespace aiui_csharp_demo
 
                 case AIUIConstant.EVENT_RESULT:
                     {
+                       
                         var info = JsonConvert.DeserializeObject<Dictionary<object, object>>(ev.GetInfo());
-
+    
                         var datas = info["data"] as JArray;
                         var data = datas[0] as JObject;
                         var param = data["params"] as JObject;
@@ -84,25 +85,21 @@ namespace aiui_csharp_demo
 
                         string sub = param["sub"].ToString();
 
-                        if (sub == "nlp" || sub == "iat" || sub == "tts" || sub == "asr")
+                        if (sub == "nlp" || sub == "iat" || sub== "tts" || sub == "asr")
                         {
                             Console.WriteLine("info: {0}", ev.GetInfo());
                             
                             string cnt_id = content["cnt_id"].ToString();
-                            int dataLen = 0;
-                            byte[] buffer = ev.GetData().GetBinary(cnt_id, ref dataLen);
 
                             if (sub != "tts")
                             {
-                                if (dataLen != 0)
+                                string resultStr = ev.GetData().GetBinaryStr(cnt_id);
+
+                                if (resultStr != null)
                                 {
-                                    string resultStr = Encoding.UTF8.GetString(buffer);
                                     Console.WriteLine("resultStr: {0}", resultStr);
-                                    resultStr = null;
                                 }
                             }
-
-                            buffer = null;
                         }
 
                         datas = null;
@@ -151,6 +148,8 @@ namespace aiui_csharp_demo
 
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.GetEncoding("GBK");
+
             string version = IAIUIAgent.Version();
             Console.WriteLine("aiui version is {0}", version);
 
@@ -225,10 +224,13 @@ namespace aiui_csharp_demo
                 msg_write_audio = null;
                 buf_1 = null;
 
-                pcm.Position += count;
-
                 Thread.Sleep(40);
             }
+
+            IAIUIMessage msg_stop_write_audio = IAIUIMessage.Create(AIUIConstant.CMD_STOP_WRITE, 0, 0, "data_type=audio", IBuffer.Zero);
+            agent.SendMessage(msg_stop_write_audio);
+            msg_stop_write_audio.Destroy();
+            msg_stop_write_audio = null;
 
             Console.WriteLine("finished!");
             pcm.Position = 0;
